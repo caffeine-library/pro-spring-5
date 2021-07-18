@@ -18,8 +18,8 @@
 결석 : 😱
 ```
 
-|날짜|emiling|binchoo|wooyounggggg|ksi05503|서기|
+|날짜|emiling|binchoo|wooyounggggg|JasonYoo1995|서기|
 |------|---|---|---|---|---|
-|2021.07.11|😊|😊|😊|😊|@emiling|
+|2021.07.11|😊|😊|😊||@emiling|
 |2021.07.18|😊|😊|😊||@wooyounggggg|
 
