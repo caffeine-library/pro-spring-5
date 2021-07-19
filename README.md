@@ -21,5 +21,5 @@
 |날짜|emiling|binchoo|wooyounggggg|JasonYoo1995|서기|목차 이슈|
 |------|---|---|---|---|---|---|
 |2021.07.11|😊|😊|😊||@emiling|[#3](https://github.com/caffeine-library/pro-spring-5/issues/3)|
-|2021.07.18|😊|😊|😊||@wooyounggggg|[#11](https://github.com/caffeine-library/pro-spring-5/issues/11)|
+|2021.07.18|😊|😊|😊||@wooyounggggg|[#10](https://github.com/caffeine-library/pro-spring-5/issues/10)|
 
