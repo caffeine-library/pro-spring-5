@@ -210,7 +210,7 @@ public class PropagationCombinationsTest {
 
         }
         assertOuterCommit();
-        assertInnerRollback();
+        assertInnerRollback(); //갱신하기 전 오류로 갱신 로직에 도달하지 못 했음
     }
 
     @Test
