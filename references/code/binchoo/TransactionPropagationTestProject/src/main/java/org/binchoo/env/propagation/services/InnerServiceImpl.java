@@ -12,17 +12,17 @@ public class InnerServiceImpl implements InnerService {
     private SimpleDataRepository repository;
 
     @Override
-    public void updateColumn(Long id, ExceptionLocation eLocation) {
+    public void updateColumn(Long id, ExceptionLocation exLocation) {
         SimpleData data = repository.findById(id).orElseGet(()->{ throw new IllegalArgumentException(); });
 
         data.setInnerCommit(true);
 
-        if (ExceptionLocation.BEFORE_UPDATE == eLocation)
-            eLocation.throwException();
+        if (ExceptionLocation.BEFORE_UPDATE == exLocation)
+            exLocation.throwException();
 
         repository.save(data);
 
-        if (ExceptionLocation.AFTER_UPDATE == eLocation)
-            eLocation.throwException();
+        if (ExceptionLocation.AFTER_UPDATE == exLocation)
+            exLocation.throwException();
     }
 }
