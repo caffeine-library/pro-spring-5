@@ -18,11 +18,11 @@ public class InnerServiceImpl implements InnerService {
         data.setInnerCommit(true);
 
         if (ExceptionLocation.BEFORE_UPDATE == eLocation)
-            eLocation.throwExcpetion();
+            eLocation.throwException();
 
         repository.save(data);
 
         if (ExceptionLocation.AFTER_UPDATE == eLocation)
-            eLocation.throwExcpetion();
+            eLocation.throwException();
     }
 }
