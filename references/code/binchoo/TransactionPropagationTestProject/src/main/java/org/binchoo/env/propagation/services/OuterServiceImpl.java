@@ -23,7 +23,6 @@ public class OuterServiceImpl implements OuterService {
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public void updateColumn(Long id, boolean outerException, ExceptionLocation innerExceptionLocation) {
-
         try {
             innerService.updateColumn(id, innerExceptionLocation);
         } catch (RuntimeException e) {

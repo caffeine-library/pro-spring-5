@@ -5,13 +5,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+@Transactional(propagation = Propagation.MANDATORY)
 @Service("innerServiceMandatory")
 public class InnerServiceMandatory implements InnerService {
 
     @Autowired
     private InnerServiceImpl impl;
 
-    @Transactional(propagation = Propagation.MANDATORY)
     @Override
     public void updateColumn(Long id, ExceptionLocation eLocation) {
         impl.updateColumn(id, eLocation);
