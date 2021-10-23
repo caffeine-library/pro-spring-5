@@ -158,7 +158,7 @@ public class PropagationCombinationsTest {
     }
 
     @Test
-    public void REQUIRES_NEW_나의_장애에_모두_롤백된다() {
+    public void REQUIRES_NEW_나의_장애에_부모는_롤백하지_않는다() {
         InnerService innerService = ctx.getBean("innerServiceRequiresNew", InnerService.class);
         outerService.setInnerService(innerService);
 
@@ -167,7 +167,7 @@ public class PropagationCombinationsTest {
         } catch (RuntimeException e) {
 
         }
-        assertOuterRollback();
+        assertOuterCommit();
         assertInnerRollback();
     }
 
@@ -186,7 +186,7 @@ public class PropagationCombinationsTest {
     }
 
     @Test
-    public void NOT_SUPPORTED_나의_갱신_전_장애는_부모를_롤백한다() {
+    public void NOT_SUPPORTED_나의_갱신_전_장애는_부모를_롤백하지_않는다() {
         InnerService innerService = ctx.getBean("innerServiceNotSupported", InnerService.class);
         outerService.setInnerService(innerService);
 
@@ -195,12 +195,12 @@ public class PropagationCombinationsTest {
         } catch (RuntimeException e) {
 
         }
-        assertOuterRollback();
+        assertOuterCommit();
         assertInnerRollback();
     }
 
     @Test
-    public void NOT_SUPPORTED_나의_갱신_후_장애도_부모를_롤백한다() {
+    public void NOT_SUPPORTED_나의_갱신_후_장애는_부모를_롤백하지_않는다() {
         InnerService innerService = ctx.getBean("innerServiceNotSupported", InnerService.class);
         outerService.setInnerService(innerService);
 
@@ -209,7 +209,7 @@ public class PropagationCombinationsTest {
         } catch (RuntimeException e) {
 
         }
-        assertOuterRollback();
+        assertOuterCommit();
         assertInnerCommit(); // InnerCommit은 true로 갱신 후에 예외가 발생하므로
     }
 
