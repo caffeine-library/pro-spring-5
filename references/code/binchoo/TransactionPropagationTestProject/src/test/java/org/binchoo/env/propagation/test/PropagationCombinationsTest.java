@@ -49,7 +49,6 @@ public class PropagationCombinationsTest {
 
     private void assertInnerCommit() {
         assertThat(repository.findById(1L).get().getInnerCommit()).isTrue();
-
     }
 
     private void assertOuterRollback() {
@@ -58,7 +57,6 @@ public class PropagationCombinationsTest {
 
     private void assertInnerRollback() {
         assertThat(repository.findById(1L).get().getInnerCommit()).isFalse();
-
     }
 
     @Test
