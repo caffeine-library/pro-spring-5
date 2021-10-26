@@ -13,7 +13,7 @@ public class InnerServiceImpl implements InnerService {
 
     @Override
     public void updateColumn(Long id, ExceptionLocation exLocation) {
-        SimpleData data = repository.findById(id).orElseGet(()->{ throw new IllegalArgumentException(); });
+        SimpleData data = repository.findById(id).orElseThrow(()-> new IllegalArgumentException());
 
         data.setInnerCommit(true);
 

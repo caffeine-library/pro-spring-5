@@ -36,7 +36,7 @@ public class OuterServiceImpl implements OuterService {
     }
 
     private void updateOuterColumn(Long id) {
-        SimpleData data = repository.findById(id).orElseGet(()->{ throw new IllegalArgumentException(); });
+        SimpleData data = repository.findById(id).orElseThrow(()-> new IllegalArgumentException());
 
         data.setOuterCommit(true);
 
