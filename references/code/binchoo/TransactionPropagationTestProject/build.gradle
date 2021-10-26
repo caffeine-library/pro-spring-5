@@ -91,6 +91,10 @@ buildscript {
                 tx         : "com.atomikos:transactions-hibernate4:$atomikosVersion"
         ]
 
+        eclipse = [
+                link        : "org.eclipse.persistence:eclipselink:2.6.0-M3"
+        ]
+
 
         boot = [
                 springBootPlugin: "org.springframework.boot:spring-boot-gradle-plugin:$bootVersion",
@@ -207,8 +211,9 @@ dependencies {
     }
     compile boot.starterJpa, db.h2, boot.starterWeb, boot.actuator
     compile spring.aspects, spring.data
+    compile eclipse.link
 
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    testImplementation 'org.assertj:assertj-core:3.6.2'
+    testCompile 'org.assertj:assertj-core:3.6.2'
 }
