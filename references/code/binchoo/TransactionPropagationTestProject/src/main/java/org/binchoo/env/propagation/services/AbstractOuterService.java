@@ -1,17 +1,13 @@
 package org.binchoo.env.propagation.services;
 
 import org.binchoo.env.propagation.entities.SimpleData;
+import org.binchoo.env.propagation.repos.SimpleDataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.binchoo.env.propagation.repos.SimpleDataRepository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
-public class OuterServiceImpl implements OuterService {
-
-    @Autowired
-    private SimpleDataRepository repository;
+public abstract class AbstractOuterService implements OuterService {
 
     private InnerService innerService = null;
 
@@ -20,7 +16,6 @@ public class OuterServiceImpl implements OuterService {
         this.innerService = innerService;
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public void updateColumn(Long id, boolean outerException, ExceptionLocation innerExceptionLocation) {
         try {
@@ -35,11 +30,5 @@ public class OuterServiceImpl implements OuterService {
         }
     }
 
-    private void updateOuterColumn(Long id) {
-        SimpleData data = repository.findById(id).orElseThrow(()-> new IllegalArgumentException());
-
-        data.setOuterCommit(true);
-
-        repository.save(data);
-    }
+    protected abstract void updateOuterColumn(Long id);
 }

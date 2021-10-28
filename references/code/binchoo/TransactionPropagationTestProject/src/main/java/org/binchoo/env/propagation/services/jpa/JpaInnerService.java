@@ -1,12 +1,14 @@
-package org.binchoo.env.propagation.services;
+package org.binchoo.env.propagation.services.jpa;
 
 import org.binchoo.env.propagation.entities.SimpleData;
+import org.binchoo.env.propagation.services.ExceptionLocation;
+import org.binchoo.env.propagation.services.InnerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.binchoo.env.propagation.repos.SimpleDataRepository;
 
 @Service
-public class InnerServiceImpl implements InnerService {
+public class JpaInnerService implements InnerService {
 
     @Autowired
     private SimpleDataRepository repository;

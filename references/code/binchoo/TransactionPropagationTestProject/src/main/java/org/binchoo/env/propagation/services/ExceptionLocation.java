@@ -4,7 +4,7 @@ public enum ExceptionLocation {
 
     NONE, BEFORE_UPDATE, AFTER_UPDATE;
 
-    void throwException() {
+    public void throwException() {
         throw new RuntimeException(this.name());
     }
 }
