@@ -23,6 +23,10 @@ public class SimpleData {
         this.innerCommit = c;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }
@@ -35,4 +39,8 @@ public class SimpleData {
         return innerCommit;
     }
 
+    @Override
+    public String toString() {
+        return id + "," + innerCommit + "," + outerCommit;
+    }
 }

@@ -5,23 +5,20 @@ import org.binchoo.env.propagation.repos.SimpleDataRepository;
 import org.binchoo.env.propagation.services.ExceptionLocation;
 import org.binchoo.env.propagation.services.InnerService;
 import org.binchoo.env.propagation.services.OuterService;
-import org.binchoo.env.propagation.services.em.EmOuterService;
-import org.binchoo.env.propagation.services.jpa.JpaOuterService;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.annotation.PostConstruct;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest // h2 데이터베이스를 사용한다
-public class PropagationCombinationsTest {
+@SpringBootTest
+public class JpaPropagationCombinationsTests {
 
     @Autowired
     ApplicationContext ctx;
@@ -30,21 +27,15 @@ public class PropagationCombinationsTest {
     SimpleDataRepository repository;
 
     @Autowired
-    JpaOuterService jpaOuterService;
-
-    @Autowired
-    EmOuterService emOuterService;
-
-
-    @PostConstruct
-    public void initDB() {
-        SimpleData data = new SimpleData();
-        repository.save(data);
-    }
+    @Qualifier("jpaOuterService")
+    OuterService outerService;
 
     @After
     public void cleanDB() {
         SimpleData data = repository.findById(1L).get();
+
+        System.out.println(data);
+
         data.setOuterCommit(false);
         data.setInnerCommit(false);
         repository.save(data);
@@ -69,10 +60,10 @@ public class PropagationCombinationsTest {
     @Test
     public void 예외_없으면_둘_다_갱신된다() {
         InnerService innerService = ctx.getBean("innerServiceRequired", InnerService.class);
-        jpaOuterService.setInnerService(innerService);
+        outerService.setInnerService(innerService);
 
         try {
-            jpaOuterService.updateColumn(1L, false, ExceptionLocation.NONE);
+            outerService.updateColumn(1L, false, ExceptionLocation.NONE);
         } catch (RuntimeException e) {
 
         }
@@ -83,10 +74,10 @@ public class PropagationCombinationsTest {
     @Test
     public void REQUIRED_나의_장애에_모두_롤백된다() {
         InnerService innerService = ctx.getBean("innerServiceRequired", InnerService.class);
-        jpaOuterService.setInnerService(innerService);
+        outerService.setInnerService(innerService);
 
         try {
-            jpaOuterService.updateColumn(1L, false, ExceptionLocation.AFTER_UPDATE);
+            outerService.updateColumn(1L, false, ExceptionLocation.AFTER_UPDATE);
         } catch (RuntimeException e) {
 
         }
@@ -97,10 +88,10 @@ public class PropagationCombinationsTest {
     @Test
     public void REQUIRED_부모의_장애에_모두_롤백된다() {
         InnerService innerService = ctx.getBean("innerServiceRequired", InnerService.class);
-        jpaOuterService.setInnerService(innerService);
+        outerService.setInnerService(innerService);
 
         try {
-            jpaOuterService.updateColumn(1L, true, ExceptionLocation.NONE);
+            outerService.updateColumn(1L, true, ExceptionLocation.NONE);
         } catch (RuntimeException e) {
 
         }
@@ -111,10 +102,10 @@ public class PropagationCombinationsTest {
     @Test
     public void MANDATORY_나의_장애에_모두_롤백된다() {
         InnerService innerService = ctx.getBean("innerServiceMandatory", InnerService.class);
-        jpaOuterService.setInnerService(innerService);
+        outerService.setInnerService(innerService);
 
         try {
-            jpaOuterService.updateColumn(1L, false, ExceptionLocation.AFTER_UPDATE);
+            outerService.updateColumn(1L, false, ExceptionLocation.AFTER_UPDATE);
         } catch (RuntimeException e) {
 
         }
@@ -125,10 +116,10 @@ public class PropagationCombinationsTest {
     @Test
     public void MANDATORY_부모의_장애에_모두_롤백된다() {
         InnerService innerService = ctx.getBean("innerServiceMandatory", InnerService.class);
-        jpaOuterService.setInnerService(innerService);
+        outerService.setInnerService(innerService);
 
         try {
-            jpaOuterService.updateColumn(1L, true, ExceptionLocation.NONE);
+            outerService.updateColumn(1L, true, ExceptionLocation.NONE);
         } catch (RuntimeException e) {
 
         }
@@ -139,10 +130,10 @@ public class PropagationCombinationsTest {
     @Test
     public void SUPPORTS_나의_장애에_모두_롤백된다() {
         InnerService innerService = ctx.getBean("innerServiceSupports", InnerService.class);
-        jpaOuterService.setInnerService(innerService);
+        outerService.setInnerService(innerService);
 
         try {
-            jpaOuterService.updateColumn(1L, false, ExceptionLocation.AFTER_UPDATE);
+            outerService.updateColumn(1L, false, ExceptionLocation.AFTER_UPDATE);
         } catch (RuntimeException e) {
 
         }
@@ -153,10 +144,10 @@ public class PropagationCombinationsTest {
     @Test
     public void SUPPORTS_부모의_장애에_모두_롤백된다() {
         InnerService innerService = ctx.getBean("innerServiceSupports", InnerService.class);
-        jpaOuterService.setInnerService(innerService);
+        outerService.setInnerService(innerService);
 
         try {
-            jpaOuterService.updateColumn(1L, true, ExceptionLocation.NONE);
+            outerService.updateColumn(1L, true, ExceptionLocation.NONE);
         } catch (RuntimeException e) {
 
         }
@@ -167,10 +158,10 @@ public class PropagationCombinationsTest {
     @Test
     public void REQUIRES_NEW_나의_장애에_부모는_롤백하지_않는다() {
         InnerService innerService = ctx.getBean("innerServiceRequiresNew", InnerService.class);
-        jpaOuterService.setInnerService(innerService);
+        outerService.setInnerService(innerService);
 
         try {
-            jpaOuterService.updateColumn(1L, false, ExceptionLocation.AFTER_UPDATE);
+            outerService.updateColumn(1L, false, ExceptionLocation.AFTER_UPDATE);
         } catch (RuntimeException e) {
 
         }
@@ -181,10 +172,10 @@ public class PropagationCombinationsTest {
     @Test
     public void REQUIRES_NEW_부모의_장애에_롤백되지_않는다() {
         InnerService innerService = ctx.getBean("innerServiceRequiresNew", InnerService.class);
-        jpaOuterService.setInnerService(innerService);
+        outerService.setInnerService(innerService);
 
         try {
-            jpaOuterService.updateColumn(1L, true, ExceptionLocation.NONE);
+            outerService.updateColumn(1L, true, ExceptionLocation.NONE);
         } catch (RuntimeException e) {
 
         }
@@ -195,10 +186,10 @@ public class PropagationCombinationsTest {
     @Test
     public void NOT_SUPPORTED_나의_갱신_후_장애는_부모를_롤백하지_않는다() {
         InnerService innerService = ctx.getBean("innerServiceNotSupported", InnerService.class);
-        jpaOuterService.setInnerService(innerService);
+        outerService.setInnerService(innerService);
 
         try {
-            jpaOuterService.updateColumn(1L, false, ExceptionLocation.AFTER_UPDATE);
+            outerService.updateColumn(1L, false, ExceptionLocation.AFTER_UPDATE);
         } catch (RuntimeException e) {
 
         }
@@ -209,10 +200,10 @@ public class PropagationCombinationsTest {
     @Test
     public void NOT_SUPPORTED_나의_갱신_전_장애는_부모를_롤백하지_않는다() {
         InnerService innerService = ctx.getBean("innerServiceNotSupported", InnerService.class);
-        jpaOuterService.setInnerService(innerService);
+        outerService.setInnerService(innerService);
 
         try {
-            jpaOuterService.updateColumn(1L, false, ExceptionLocation.BEFORE_UPDATE);
+            outerService.updateColumn(1L, false, ExceptionLocation.BEFORE_UPDATE);
         } catch (RuntimeException e) {
 
         }
@@ -223,42 +214,15 @@ public class PropagationCombinationsTest {
     @Test
     public void NOT_SUPPORTED_나는_부모의_장애에_롤백되지_않는다() {
         InnerService innerService = ctx.getBean("innerServiceNotSupported", InnerService.class);
-        jpaOuterService.setInnerService(innerService);
+        outerService.setInnerService(innerService);
 
         try {
-            jpaOuterService.updateColumn(1L, true, ExceptionLocation.AFTER_UPDATE);
+            outerService.updateColumn(1L, true, ExceptionLocation.AFTER_UPDATE);
         } catch (RuntimeException e) {
 
         }
+
         assertOuterRollback();
         assertInnerCommit(); // 비트랜잭션이므로
-    }
-
-    @Test
-    public void NESTED_나는_부모의_장애에_롤백된다() {
-        InnerService innerService = ctx.getBean("innerServiceNested", InnerService.class);
-        emOuterService.setInnerService(innerService);
-
-        try {
-            emOuterService.updateColumn(1L, true, ExceptionLocation.NONE);
-        } catch (RuntimeException e) {
-
-        }
-        assertOuterRollback();
-        assertInnerRollback();
-    }
-
-    @Test
-    public void NESTED_나는_부모를_롤백시키지_않는다() {
-        InnerService innerService = ctx.getBean("innerServiceNested", InnerService.class);
-        emOuterService.setInnerService(innerService);
-
-        try {
-            emOuterService.updateColumn(1L, false, ExceptionLocation.AFTER_UPDATE);
-        } catch (RuntimeException e) {
-
-        }
-        assertOuterCommit();
-        assertInnerRollback();
     }
 }

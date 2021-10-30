@@ -1,27 +1,24 @@
-package org.binchoo.env.propagation.services.em;
+package org.binchoo.env.propagation.services.inner;
 
 import org.binchoo.env.propagation.services.ExceptionLocation;
 import org.binchoo.env.propagation.services.InnerService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-
 @Service
-public class EmInnerService implements InnerService {
+public class JdbcInnerService implements InnerService {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @Override
     public void updateColumn(Long id, ExceptionLocation exLocation) {
-        Query updateQuery = entityManager.createQuery("update SimpleData set innerCommit = true where id = ?1").setParameter(1, id);
 
         if (ExceptionLocation.BEFORE_UPDATE == exLocation)
             exLocation.throwException();
 
-        updateQuery.executeUpdate();
+        jdbcTemplate.update("Update SimpleData set innerCommit = true where id = ?", id);
 
         if (ExceptionLocation.AFTER_UPDATE == exLocation)
             exLocation.throwException();

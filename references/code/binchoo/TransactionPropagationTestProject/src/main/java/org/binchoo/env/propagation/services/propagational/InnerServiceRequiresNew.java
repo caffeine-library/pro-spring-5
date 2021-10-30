@@ -2,13 +2,13 @@ package org.binchoo.env.propagation.services.propagational;
 
 import org.binchoo.env.propagation.services.ExceptionLocation;
 import org.binchoo.env.propagation.services.InnerService;
-import org.binchoo.env.propagation.services.jpa.JpaInnerService;
+import org.binchoo.env.propagation.services.inner.JpaInnerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional(propagation = Propagation.REQUIRES_NEW)
+@Transactional(propagation = Propagation.REQUIRES_NEW, transactionManager = "transactionManager")
 @Service("innerServiceRequiresNew")
 public class InnerServiceRequiresNew implements InnerService {
 

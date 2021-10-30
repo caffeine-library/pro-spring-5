@@ -1,4 +1,4 @@
-package org.binchoo.env.propagation.services.jpa;
+package org.binchoo.env.propagation.services.inner;
 
 import org.binchoo.env.propagation.entities.SimpleData;
 import org.binchoo.env.propagation.services.ExceptionLocation;
