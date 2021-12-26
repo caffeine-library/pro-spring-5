@@ -7,6 +7,6 @@ assignees: binchoo, wooyounggggg, emiling, JasonYoo1995
 
 ---
 
-## 챕터
+## 연관 챕터
 
 ## 내용 요약
